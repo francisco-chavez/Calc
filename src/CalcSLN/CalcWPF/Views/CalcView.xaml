@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="280" d:DesignWidth="200">
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition/>
@@ -28,5 +28,44 @@
 				   Margin="4"
 				   TextAlignment="Right"
 				   Text="087"/>
-    </Grid>
+		
+		<Button Grid.Row="5" Grid.Column="0"
+				Content="0"/>
+		<Button Grid.Row="4" Grid.Column="0"
+				Content="1"/>
+		<Button Grid.Row="4" Grid.Column="1"
+				Content="2"/>
+		<Button Grid.Row="4" Grid.Column="2"
+				Content="3"/>
+		
+		<Button Grid.Row="3" Grid.Column="0"
+				Content="4"/>
+		<Button Grid.Row="3" Grid.Column="1"
+				Content="5"/>
+		<Button Grid.Row="3" Grid.Column="2"
+				Content="6"/>
+		
+		<Button Grid.Row="2" Grid.Column="0"
+				Content="7"/>
+		<Button Grid.Row="2" Grid.Column="1"
+				Content="8"/>
+		<Button Grid.Row="2" Grid.Column="2"
+				Content="9"/>
+		
+		<Button Grid.Row="5" Grid.Column="1"
+				Content="."/>
+		
+		<!-- Plus Button -->
+		<Button Grid.Row="2" Grid.Column="4" 
+				Content="&#43;"/>
+		<!-- Minus Button -->
+		<Button Grid.Row="3" Grid.Column="4" 
+				Content="&#8722;"/>
+		<!-- Times Button -->
+		<Button Grid.Row="4" Grid.Column="4" 
+				Content="&#215;"/>
+		<!-- Div Button -->
+		<Button Grid.Row="5" Grid.Column="4" 
+				Content="&#247;"/>
+	</Grid>
 </UserControl>
