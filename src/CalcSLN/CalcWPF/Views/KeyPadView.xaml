@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="304" d:DesignWidth="308">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
@@ -59,9 +59,10 @@
 
 			<Button Grid.Row="3" Grid.Column="1"
 					Content="."/>
-			
+
+			<!-- Invert Pos/Neg Button -->
 			<Button Grid.Row="3" Grid.Column="2"
-					Content="="/>
+					Content="&#177;" />
 		</Grid>
 		
 		<!-- Math Operations { +, -, *, / } -->
@@ -87,7 +88,7 @@
 					Content="&#247;" />
 		</Grid>
 		
-		<!-- MRC Functions-->
+		<!-- MR Functions-->
 		<Grid Grid.Column="0" Grid.Row="2">
 			<Grid.RowDefinitions>
 				<RowDefinition/>
@@ -95,6 +96,15 @@
 				<RowDefinition/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
+			
+			<Button Grid.Row="0"
+					Content="MC"/>
+			<Button Grid.Row="1"
+					Content="MR"/>
+			<Button Grid.Row="2"
+					Content="M+"/>
+			<Button Grid.Row="3"
+					Content="M-"/>
 		</Grid>
 
 
@@ -102,9 +112,23 @@
 		<Button Grid.Row="0" Grid.Column="4"
 				Content="C"/>
 
-		<!-- Invert Pos/Neg Button -->
-		<Button Grid.Row="0" Grid.Column="2"
-				Content="&#177;" />
+		<Grid Grid.Column="2" Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Square Root -->
+			<Button Grid.Column="1"
+					Content="&#x221A;"/>
+			<!-- Percent -->
+			<Button Grid.Column="0"
+					Content="&#37;"/>
+
+			<Button Grid.Column="2"
+					Content="="/>
+		</Grid>
 	</Grid>
 
 </UserControl>
