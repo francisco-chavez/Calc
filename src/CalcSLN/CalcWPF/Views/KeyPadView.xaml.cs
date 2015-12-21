@@ -24,5 +24,15 @@ namespace Unv.CalcWPF.Views
 		{
 			InitializeComponent();
 		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			Button buttonClicked = sender as Button;
+
+			if (buttonClicked == null)
+				throw new Exception("Button Click sender wasn't a Button object.");
+
+			var btnString = buttonClicked.Content.ToString();
+		}
 	}
 }
