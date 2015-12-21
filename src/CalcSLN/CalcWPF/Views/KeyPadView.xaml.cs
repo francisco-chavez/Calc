@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Unv.CalcWPF.Views
 {
 	/// <summary>
-	/// Interaction logic for CalcView.xaml
+	/// Interaction logic for KeyPadView.xaml
 	/// </summary>
-	public partial class CalcView : UserControl
+	public partial class KeyPadView : UserControl
 	{
-		public CalcView()
+		public KeyPadView()
 		{
 			InitializeComponent();
 		}
