@@ -25,6 +25,8 @@ namespace Unv.CalcWPF
 		private bool		_clearReg01OnNumInput;
 		private bool		_pointUsed;
 		private int			_decimalLocation;
+		private string		_entryDisplay;
+
 
 		// Register M meta data
 		private bool		_memoryInUse;
@@ -34,15 +36,15 @@ namespace Unv.CalcWPF
 		#endregion
 
 		#region Properties
-		public double Reg01
+		public string EntryDisplay
 		{
-			get { return _reg01; }
-			private set
+			get { return _entryDisplay; }
+			set
 			{
-				if (_reg01 != value)
+				if (_entryDisplay != value)
 				{
-					_reg01 = value;
-					OnPropertyChanged("Reg01");
+					_entryDisplay = value;
+					OnPropertyChanged("EntryDisplay");
 				}
 			}
 		}
@@ -62,6 +64,7 @@ namespace Unv.CalcWPF
 		#endregion
 
 
+		#region Construtors
 		public TheBrain()
 		{
 			_reg00	= 0d;
@@ -71,7 +74,9 @@ namespace Unv.CalcWPF
 
 			MemoryInUse = false;
 			_currentOpp = CalcInput.KeyAdd;
+			UpdateDisplay();
 		}
+		#endregion
 
 
 		public void NewInput(CalcInput input)
@@ -103,12 +108,11 @@ namespace Unv.CalcWPF
 				}
 				else
 				{
-					Reg01 *= 10;
+					_reg01 *= 10;
 				}
 
-				newValue *= Math.Sign(Reg01);
-				Reg01 += newValue;
-
+				newValue *= Math.Sign(_reg01);
+				_reg01 += newValue;
 				break;
 
 
@@ -133,20 +137,20 @@ namespace Unv.CalcWPF
 				break;
 			
 			case CalcInput.KeyInvertSign:
-				Reg01 *= -1;
+				_reg01 *= -1;
 				break;
 
 			case CalcInput.KeyPercent:
-				Reg01 = _reg00 * Reg01 / 100d;
+				_reg01 = _reg00 * _reg01 / 100d;
 				break;
 
 			case CalcInput.KeySquareRoot:
-				Reg01 = Math.Sqrt(Reg01);
+				_reg01 = Math.Sqrt(_reg01);
 				break;
 
 			case CalcInput.KeyEquals:
 				CommitCurrentOperation();
-				Reg01 = _reg00;
+				_reg01 = _reg00;
 				break;
 
 			case CalcInput.KeyClear:
@@ -166,28 +170,35 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyMemoryRetrieve:
-				Reg01 = _regM;
+				_reg01 = _regM;
 				MemoryInUse = true;
 				break;
 
 			case CalcInput.KeyMemoryAdd:
-				_regM += Reg01;
+				_regM += _reg01;
 				MemoryInUse = true;
 				break;
 
 			case CalcInput.KeyMemorySubtract:
-				_regM -= Reg01;
+				_regM -= _reg01;
 				MemoryInUse = true;
 				break;
 
 			default:
 				throw new InvalidEnumArgumentException();
 			}
+			UpdateDisplay();
+		}
+
+		private void UpdateDisplay()
+		{
+			string formatString = "{0:F" + _decimalLocation.ToString() + "}";
+			EntryDisplay = string.Format(formatString, _reg01);
 		}
 
 		private void StartNewNumber()
 		{
-			Reg01				= 0d;
+			_reg01				= 0d;
 			_pointUsed			= false;
 			_decimalLocation	= 0;
 			_clearReg01OnNumInput = false;
@@ -198,16 +209,16 @@ namespace Unv.CalcWPF
 			switch (_currentOpp)
 			{
 			case CalcInput.KeyAdd:
-				_reg00 += Reg01;
+				_reg00 += _reg01;
 				break;
 			case CalcInput.KeySubtract:
-				_reg00 -= Reg01;
+				_reg00 -= _reg01;
 				break;
 			case CalcInput.KeyMultiply:
-				_reg00 *= Reg01;
+				_reg00 *= _reg01;
 				break;
 			case CalcInput.KeyDivide:
-				_reg00 /= Reg01;
+				_reg00 /= _reg01;
 				break;
 			default:
 				break;
