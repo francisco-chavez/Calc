@@ -109,6 +109,26 @@ namespace Unv.CalcWPF.Views
 				convertedValue = CalcInput.KeyMemorySubtract;
 				break;
 
+			// Clear
+			case "C":
+				convertedValue = CalcInput.KeyClear;
+				break;
+
+			// Square Root
+			case "\u221A":
+				convertedValue = CalcInput.KeySquareRoot;
+				break;
+
+			// Percent
+			case "\u0025":
+				convertedValue = CalcInput.KeyPercent;
+				break;
+
+			// Case Equals
+			case "=":
+				convertedValue = CalcInput.KeyEquals;
+				break;
+
 			default:
 				break;
 			}
