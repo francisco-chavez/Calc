@@ -26,6 +26,9 @@ namespace Unv.CalcWPF
 		private bool		_pointUsed;
 		private int			_decimalLocation;
 
+		// Register M meta data
+		private bool		_memInUse;
+
 		// Opperation in use
 		private CalcInput	_currentOpp;
 		#endregion
@@ -41,6 +44,7 @@ namespace Unv.CalcWPF
 			_pointUsed				= false;
 			_decimalLocation		= 0;
 
+			_memInUse	= false;
 			_currentOpp = CalcInput.KeyAdd;
 		}
 
@@ -141,16 +145,30 @@ namespace Unv.CalcWPF
 				_clearReg01OnNumInput = false;
 				break;
 
+
 			case CalcInput.KeyMemoryClear:
+				_regM = 0d;
+				_memInUse = false;
+				break;
+
 			case CalcInput.KeyMemoryRetrieve:
+				_reg01 = _regM;
+				_memInUse = true;
+				break;
+
 			case CalcInput.KeyMemoryAdd:
+				_regM += _reg01;
+				_memInUse = true;
+				break;
+
 			case CalcInput.KeyMemorySubtract:
-				throw new NotImplementedException();
+				_regM -= _reg01;
+				_memInUse = true;
+				break;
 
 			default:
 				throw new InvalidEnumArgumentException();
 			}
-			throw new NotImplementedException();
 		}
 
 		private void CommitCurrentOperation()
