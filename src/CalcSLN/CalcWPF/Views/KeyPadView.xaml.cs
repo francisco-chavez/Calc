@@ -95,6 +95,20 @@ namespace Unv.CalcWPF.Views
 				convertedValue = CalcInput.KeyDivide;
 				break;
 
+			// Memory Functions
+			case "MC":
+				convertedValue = CalcInput.KeyMemoryClear;
+				break;
+			case "MR":
+				convertedValue = CalcInput.KeyMemoryRetrieve;
+				break;
+			case "M+":
+				convertedValue = CalcInput.KeyMemoryAdd;
+				break;
+			case "M-":
+				convertedValue = CalcInput.KeyMemorySubtract;
+				break;
+
 			default:
 				break;
 			}
