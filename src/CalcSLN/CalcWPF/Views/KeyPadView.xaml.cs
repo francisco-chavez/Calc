@@ -38,44 +38,64 @@ namespace Unv.CalcWPF.Views
 
 			switch (btnString)
 			{
+			// NumPad keys
 			case "0":
 				convertedValue = CalcInput.NumKey0;
 				break;
-
 			case "1":
 				convertedValue = CalcInput.NumKey1;
 				break;
-
 			case "2":
 				convertedValue = CalcInput.NumKey2;
 				break;
-
 			case "3":
 				convertedValue = CalcInput.NumKey3;
 				break;
-
 			case "4":
 				convertedValue = CalcInput.NumKey4;
 				break;
-
 			case "5":
 				convertedValue = CalcInput.NumKey5;
 				break;
-
 			case "6":
 				convertedValue = CalcInput.NumKey6;
 				break;
-
 			case "7":
 				convertedValue = CalcInput.NumKey7;
 				break;
-
 			case "8":
 				convertedValue = CalcInput.NumKey8;
 				break;
-
 			case "9":
 				convertedValue = CalcInput.NumKey9;
+				break;
+			case ".":
+				convertedValue = CalcInput.KeyPoint;
+				break;
+
+			// Invert number sign
+			case "\u00B1":
+				convertedValue = CalcInput.KeyInvertSign;
+				break;
+
+			// Add Operation
+			case "\u002B":
+				convertedValue = CalcInput.KeyAdd;
+				break;
+			// Subract Operation
+			case "\u2212":
+				convertedValue = CalcInput.KeySubtract;
+				break;
+			// Multiply Operation
+			case "\u00D7":
+				convertedValue = CalcInput.KeyMultiply;
+				break;
+			// Divide Operation
+			case "\u00F7":
+				convertedValue = CalcInput.KeyDivide;
+				break;
+
+			default:
 				break;
 			}
 		}
