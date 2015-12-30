@@ -20,6 +20,7 @@ namespace Unv.CalcWPF
 		KeySquareRoot,
 		KeyEquals,
 		KeyClear,
+		KeyClearEntry,
 		KeyAdd,
 		KeySubtract,
 		KeyMultiply,

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Unv.CalcWPF.Views
 {
 	/// <summary>
@@ -113,6 +114,10 @@ namespace Unv.CalcWPF.Views
 			case "C":
 				convertedValue = CalcInput.KeyClear;
 				break;
+			// Clear Entry
+			case "CE":
+				convertedValue = CalcInput.KeyClearEntry;
+				break;
 
 			// Square Root
 			case "\u221A":
@@ -130,7 +135,7 @@ namespace Unv.CalcWPF.Views
 				break;
 
 			default:
-				break;
+				throw new ArgumentException(string.Format("\"{0}\" is not an accepted input."));
 			}
 		}
 	}

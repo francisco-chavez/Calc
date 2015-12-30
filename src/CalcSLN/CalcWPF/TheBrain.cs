@@ -155,6 +155,10 @@ namespace Unv.CalcWPF
 				_currentOpp = CalcInput.KeyAdd;
 				break;
 
+			case CalcInput.KeyClearEntry:
+				StartNewNumber();
+				break;
+
 
 			case CalcInput.KeyMemoryClear:
 				_regM = 0d;
