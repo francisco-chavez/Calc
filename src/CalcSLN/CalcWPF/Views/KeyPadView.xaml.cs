@@ -33,6 +33,51 @@ namespace Unv.CalcWPF.Views
 				throw new Exception("Button Click sender wasn't a Button object.");
 
 			var btnString = buttonClicked.Content.ToString();
+
+			CalcInput convertedValue = CalcInput.NumKey0;
+
+			switch (btnString)
+			{
+			case "0":
+				convertedValue = CalcInput.NumKey0;
+				break;
+
+			case "1":
+				convertedValue = CalcInput.NumKey1;
+				break;
+
+			case "2":
+				convertedValue = CalcInput.NumKey2;
+				break;
+
+			case "3":
+				convertedValue = CalcInput.NumKey3;
+				break;
+
+			case "4":
+				convertedValue = CalcInput.NumKey4;
+				break;
+
+			case "5":
+				convertedValue = CalcInput.NumKey5;
+				break;
+
+			case "6":
+				convertedValue = CalcInput.NumKey6;
+				break;
+
+			case "7":
+				convertedValue = CalcInput.NumKey7;
+				break;
+
+			case "8":
+				convertedValue = CalcInput.NumKey8;
+				break;
+
+			case "9":
+				convertedValue = CalcInput.NumKey9;
+				break;
+			}
 		}
 	}
 }
