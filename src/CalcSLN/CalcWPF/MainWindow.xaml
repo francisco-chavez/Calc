@@ -17,5 +17,6 @@
 		
 		<views:KeyPadView Grid.Row="1"
 						  DataContext="{Binding Computer}"/>
+		
 	</Grid>
 </Window>

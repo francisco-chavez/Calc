@@ -54,6 +54,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CalcInput.cs" />
+    <Compile Include="BoolToContentConverter.cs" />
     <Compile Include="TheBrain.cs" />
     <Compile Include="Views\KeyPadView.xaml.cs">
       <DependentUpon>KeyPadView.xaml</DependentUpon>
