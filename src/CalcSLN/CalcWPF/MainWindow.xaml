@@ -17,6 +17,20 @@
 		
 		<views:KeyPadView Grid.Row="1"
 						  DataContext="{Binding Computer}"/>
-		
+		<TextBlock Grid.Row="0"
+				   HorizontalAlignment="Stretch">
+			<Run Text="{Binding Path=Computer.MemoryInUse, 
+								Mode=OneWay, 
+								UpdateSourceTrigger=PropertyChanged, 
+								Converter={StaticResource MemDisplayConverter}}"
+				 BaselineAlignment="Superscript"
+				 FontSize="15"
+				 FontWeight="Bold"
+				 FlowDirection="LeftToRight"/>
+			<Run Text="{Binding Path=Computer.EntryDisplay, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+				 FontSize="15"
+				 FontWeight="Bold" 
+				 FlowDirection="RightToLeft"/>
+		</TextBlock>
 	</Grid>
 </Window>
