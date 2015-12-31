@@ -15,6 +15,7 @@
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		
-		<views:KeyPadView Grid.Row="1"/>
+		<views:KeyPadView Grid.Row="1"
+						  DataContext="{Binding Computer}"/>
 	</Grid>
 </Window>

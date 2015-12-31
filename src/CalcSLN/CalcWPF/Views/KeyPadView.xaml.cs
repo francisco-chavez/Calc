@@ -19,7 +19,8 @@ namespace Unv.CalcWPF.Views
 	/// <summary>
 	/// Interaction logic for KeyPadView.xaml
 	/// </summary>
-	public partial class KeyPadView : UserControl
+	public partial class KeyPadView 
+		: UserControl
 	{
 		public KeyPadView()
 		{
@@ -35,108 +36,120 @@ namespace Unv.CalcWPF.Views
 
 			var btnString = buttonClicked.Content.ToString();
 
-			CalcInput convertedValue = CalcInput.NumKey0;
+			CalcInput inputValue = ConvertInput(btnString);
 
-			switch (btnString)
+			var calculator = this.DataContext as TheBrain;
+			if (calculator == null)
+				throw new MemberAccessException("Unable to find TheBrain instance in DataContext of KeyPadView.");
+			calculator.NewInput(inputValue);
+		}
+
+		private CalcInput ConvertInput(string input)
+		{
+			CalcInput result;
+
+			switch (input)
 			{
 			// NumPad keys
 			case "0":
-				convertedValue = CalcInput.NumKey0;
+				result = CalcInput.NumKey0;
 				break;
 			case "1":
-				convertedValue = CalcInput.NumKey1;
+				result = CalcInput.NumKey1;
 				break;
 			case "2":
-				convertedValue = CalcInput.NumKey2;
+				result = CalcInput.NumKey2;
 				break;
 			case "3":
-				convertedValue = CalcInput.NumKey3;
+				result = CalcInput.NumKey3;
 				break;
 			case "4":
-				convertedValue = CalcInput.NumKey4;
+				result = CalcInput.NumKey4;
 				break;
 			case "5":
-				convertedValue = CalcInput.NumKey5;
+				result = CalcInput.NumKey5;
 				break;
 			case "6":
-				convertedValue = CalcInput.NumKey6;
+				result = CalcInput.NumKey6;
 				break;
 			case "7":
-				convertedValue = CalcInput.NumKey7;
+				result = CalcInput.NumKey7;
 				break;
 			case "8":
-				convertedValue = CalcInput.NumKey8;
+				result = CalcInput.NumKey8;
 				break;
 			case "9":
-				convertedValue = CalcInput.NumKey9;
+				result = CalcInput.NumKey9;
 				break;
 			case ".":
-				convertedValue = CalcInput.KeyPoint;
+				result = CalcInput.KeyPoint;
 				break;
 
 			// Invert number sign
 			case "\u00B1":
-				convertedValue = CalcInput.KeyInvertSign;
+				result = CalcInput.KeyInvertSign;
 				break;
 
 			// Add Operation
 			case "\u002B":
-				convertedValue = CalcInput.KeyAdd;
+				result = CalcInput.KeyAdd;
 				break;
 			// Subract Operation
 			case "\u2212":
-				convertedValue = CalcInput.KeySubtract;
+				result = CalcInput.KeySubtract;
 				break;
 			// Multiply Operation
 			case "\u00D7":
-				convertedValue = CalcInput.KeyMultiply;
+				result = CalcInput.KeyMultiply;
 				break;
 			// Divide Operation
 			case "\u00F7":
-				convertedValue = CalcInput.KeyDivide;
+				result = CalcInput.KeyDivide;
 				break;
 
 			// Memory Functions
 			case "MC":
-				convertedValue = CalcInput.KeyMemoryClear;
+				result = CalcInput.KeyMemoryClear;
 				break;
 			case "MR":
-				convertedValue = CalcInput.KeyMemoryRetrieve;
+				result = CalcInput.KeyMemoryRetrieve;
 				break;
 			case "M+":
-				convertedValue = CalcInput.KeyMemoryAdd;
+				result = CalcInput.KeyMemoryAdd;
 				break;
 			case "M-":
-				convertedValue = CalcInput.KeyMemorySubtract;
+				result = CalcInput.KeyMemorySubtract;
 				break;
 
 			// Clear
 			case "C":
-				convertedValue = CalcInput.KeyClear;
+				result = CalcInput.KeyClear;
 				break;
 			// Clear Entry
 			case "CE":
-				convertedValue = CalcInput.KeyClearEntry;
+				result = CalcInput.KeyClearEntry;
 				break;
 
 			// Square Root
 			case "\u221A":
-				convertedValue = CalcInput.KeySquareRoot;
+				result = CalcInput.KeySquareRoot;
 				break;
 
 			// Percent
 			case "\u0025":
-				convertedValue = CalcInput.KeyPercent;
+				result = CalcInput.KeyPercent;
 				break;
 
 			// Case Equals
 			case "=":
-				convertedValue = CalcInput.KeyEquals;
+				result = CalcInput.KeyEquals;
 				break;
 
 			default:
 				throw new ArgumentException(string.Format("\"{0}\" is not an accepted input."));
 			}
+			
+			return result;
 		}
 	}
 }
