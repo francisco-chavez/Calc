@@ -25,12 +25,10 @@
 								Converter={StaticResource MemDisplayConverter}}"
 				 BaselineAlignment="Superscript"
 				 FontSize="15"
-				 FontWeight="Bold"
-				 FlowDirection="LeftToRight"/>
+				 FontWeight="Bold"/>
 			<Run Text="{Binding Path=Computer.EntryDisplay, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 				 FontSize="15"
-				 FontWeight="Bold" 
-				 FlowDirection="RightToLeft"/>
+				 FontWeight="Bold"/>
 		</TextBlock>
 	</Grid>
 </Window>
