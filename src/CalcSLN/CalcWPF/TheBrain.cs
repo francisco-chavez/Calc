@@ -111,7 +111,10 @@ namespace Unv.CalcWPF
 					_reg01 *= 10;
 				}
 
-				newValue *= Math.Sign(_reg01);
+				var sign = Math.Sign(_reg01);
+				if (sign == 0)
+					sign = 1;
+				newValue *= Math.Sign(sign);
 				_reg01 += newValue;
 				break;
 
