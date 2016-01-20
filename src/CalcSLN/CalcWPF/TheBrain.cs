@@ -15,18 +15,16 @@ namespace Unv.CalcWPF
 		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
 
+
 		#region Attributes
 		// Registers
-		private double		_reg00;
-		private double		_reg01;
-		private double		_regM;
+		private string		_reg00;
+		private string		_reg01;
+		private string		_regM;
 
 		// Register 01 meta data
 		private bool		_clearReg01OnNumInput;
-		private bool		_pointUsed;
-		private int			_decimalLocation;
 		private string		_entryDisplay;
-
 
 		// Register M meta data
 		private bool		_memoryInUse;
@@ -34,6 +32,7 @@ namespace Unv.CalcWPF
 		// Opperation in use
 		private CalcInput	_currentOpp;
 		#endregion
+
 
 		#region Properties
 		public string EntryDisplay
@@ -67,8 +66,8 @@ namespace Unv.CalcWPF
 		#region Construtors
 		public TheBrain()
 		{
-			_reg00	= 0d;
-			_regM	= 0d;
+			_reg00	= "0";
+			_regM	= "0";
 
 			StartNewNumber();
 
@@ -81,6 +80,10 @@ namespace Unv.CalcWPF
 
 		public void NewInput(CalcInput input)
 		{
+			decimal reg00 = Convert.ToDecimal(_reg00);
+			decimal reg01 = Convert.ToDecimal(_reg01);
+			decimal regM  = Convert.ToDecimal(_regM);
+
 			switch (input)
 			{
 			case CalcInput.NumKey0:
@@ -100,22 +103,15 @@ namespace Unv.CalcWPF
 				if (_clearReg01OnNumInput)
 					StartNewNumber();
 
-				double newValue = (int) input;
-				if (_pointUsed)
+				if (_reg01 == "0")
 				{
-					_decimalLocation++;
-					newValue *= Math.Pow(0.1, _decimalLocation);
-				}
-				else
-				{
-					_reg01 *= 10;
+					if (input == CalcInput.NumKey0)
+						return;
+					_reg01 = "";
 				}
 
-				var sign = Math.Sign(_reg01);
-				if (sign == 0)
-					sign = 1;
-				newValue *= Math.Sign(sign);
-				_reg01 += newValue;
+				_reg01 += ((int) input).ToString();
+
 				break;
 
 
@@ -123,7 +119,7 @@ namespace Unv.CalcWPF
 			case CalcInput.KeySubtract:
 			case CalcInput.KeyMultiply:
 			case CalcInput.KeyDivide:
-				CommitCurrentOperation();
+				CommitCurrentOperation(reg00, reg01);
 				_currentOpp = input;
 				break;
 
@@ -132,32 +128,37 @@ namespace Unv.CalcWPF
 				// If starting new number
 				if (_clearReg01OnNumInput)
 					StartNewNumber();
-				if (_pointUsed)
-					return;
 
-				_pointUsed = true;
-				_decimalLocation = 0;
+				if (_reg01.Contains('.'))
+					return;
+				_reg01 += ".";
 				break;
 			
 			case CalcInput.KeyInvertSign:
-				_reg01 *= -1;
+				var zeroCheck = new char[] { '-', '.', '0' };
+				if (_reg01.All(c => { return zeroCheck.Contains(c); }))
+					return;
+				if (_reg01.StartsWith("-"))
+					_reg01 = _reg01.Substring(1);
+				else
+					_reg01 = "-" + _reg01;
 				break;
 
 			case CalcInput.KeyPercent:
-				_reg01 = _reg00 * _reg01 / 100d;
+				_reg01 = (reg00 * reg01 / 100M).ToString();
 				break;
 
 			case CalcInput.KeySquareRoot:
-				_reg01 = Math.Sqrt(_reg01);
+				_reg01 = Math.Sqrt((double) reg01).ToString();
 				break;
 
 			case CalcInput.KeyEquals:
-				CommitCurrentOperation();
+				CommitCurrentOperation(reg00, reg01);
 				_reg01 = _reg00;
 				break;
 
 			case CalcInput.KeyClear:
-				_reg00		= 0d;
+				_reg00 = "0";
 				StartNewNumber();
 				_currentOpp = CalcInput.KeyAdd;
 				break;
@@ -168,7 +169,7 @@ namespace Unv.CalcWPF
 
 
 			case CalcInput.KeyMemoryClear:
-				_regM = 0d;
+				_regM = "0";
 				MemoryInUse = false;
 				break;
 
@@ -178,12 +179,12 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyMemoryAdd:
-				_regM += _reg01;
+				_regM = (regM + reg01).ToString();
 				MemoryInUse = true;
 				break;
 
 			case CalcInput.KeyMemorySubtract:
-				_regM -= _reg01;
+				_regM = (regM - reg01).ToString();
 				MemoryInUse = true;
 				break;
 
@@ -195,33 +196,35 @@ namespace Unv.CalcWPF
 
 		private void UpdateDisplay()
 		{
-			string formatString = "{0:F" + _decimalLocation.ToString() + "}";
-			EntryDisplay = string.Format(formatString, _reg01);
+			string[] subStrings = _reg01.Split(new char[] { '.' });
+			string formatString = "{0:N0}";
+			if (subStrings.Length > 1)
+				formatString = "{0:N" + subStrings[1].Length.ToString() + "}";
+
+			EntryDisplay = string.Format(formatString, Convert.ToDecimal(_reg01));
 		}
 
 		private void StartNewNumber()
 		{
-			_reg01				= 0d;
-			_pointUsed			= false;
-			_decimalLocation	= 0;
+			_reg01 = "0";
 			_clearReg01OnNumInput = false;
 		}
 
-		private void CommitCurrentOperation()
+		private void CommitCurrentOperation(decimal value1, decimal value2)
 		{
 			switch (_currentOpp)
 			{
 			case CalcInput.KeyAdd:
-				_reg00 += _reg01;
+				_reg00 = (value1 + value2).ToString();
 				break;
 			case CalcInput.KeySubtract:
-				_reg00 -= _reg01;
+				_reg00 = (value1 - value2).ToString();
 				break;
 			case CalcInput.KeyMultiply:
-				_reg00 *= _reg01;
+				_reg00 = (value1 * value2).ToString();
 				break;
 			case CalcInput.KeyDivide:
-				_reg00 /= _reg01;
+				_reg00 = (value1 / value2).ToString();
 				break;
 			default:
 				break;
