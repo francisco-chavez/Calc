@@ -11,14 +11,22 @@
 		WindowStyle="ToolWindow">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
+			<RowDefinition Height="34"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		
 		<views:KeyPadView Grid.Row="1"
 						  DataContext="{Binding Computer}"/>
+		
+		<Rectangle Grid.Row="0"
+				   HorizontalAlignment="Stretch"
+				   VerticalAlignment="Stretch"
+				   Fill="Gray"
+				   Margin="4"/>
 		<TextBlock Grid.Row="0"
-				   HorizontalAlignment="Stretch">
+				   HorizontalAlignment="Left"
+				   VerticalAlignment="Center"
+				   Margin="8,0">
 			<Run Text="{Binding Path=Computer.MemoryInUse, 
 								Mode=OneWay, 
 								UpdateSourceTrigger=PropertyChanged, 
@@ -26,6 +34,11 @@
 				 BaselineAlignment="Superscript"
 				 FontSize="15"
 				 FontWeight="Bold"/>
+		</TextBlock>
+		<TextBlock Grid.Row="0"
+				   Margin="8,0"
+				   HorizontalAlignment="Right"
+				   VerticalAlignment="Center">
 			<Run Text="{Binding Path=Computer.EntryDisplay, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
 				 FontSize="15"
 				 FontWeight="Bold"/>
