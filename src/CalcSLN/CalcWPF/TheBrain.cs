@@ -80,9 +80,10 @@ namespace Unv.CalcWPF
 
 		public void NewInput(CalcInput input)
 		{
-			decimal reg00 = Convert.ToDecimal(_reg00);
-			decimal reg01 = Convert.ToDecimal(_reg01);
-			decimal regM  = Convert.ToDecimal(_regM);
+			decimal reg00	= Convert.ToDecimal(_reg00);
+			decimal reg01	= Convert.ToDecimal(_reg01);
+			decimal regM	= Convert.ToDecimal(_regM);
+			bool	useReg0 = false;
 
 			switch (input)
 			{
@@ -121,6 +122,7 @@ namespace Unv.CalcWPF
 			case CalcInput.KeyDivide:
 				CommitCurrentOperation(reg00, reg01);
 				_currentOpp = input;
+				useReg0 = true;
 				break;
 
 
@@ -191,17 +193,17 @@ namespace Unv.CalcWPF
 			default:
 				throw new InvalidEnumArgumentException();
 			}
-			UpdateDisplay();
+			UpdateDisplay(useReg0);
 		}
 
-		private void UpdateDisplay()
+		private void UpdateDisplay(bool useReg0 = false)
 		{
 			string[] subStrings = _reg01.Split(new char[] { '.' });
 			string formatString = "{0:N0}";
 			if (subStrings.Length > 1)
 				formatString = "{0:N" + subStrings[1].Length.ToString() + "}";
 
-			EntryDisplay = string.Format(formatString, Convert.ToDecimal(_reg01));
+			EntryDisplay = string.Format(formatString, Convert.ToDecimal(useReg0 ? _reg00 : _reg01));
 		}
 
 		private void StartNewNumber()
