@@ -31,6 +31,8 @@ namespace Unv.CalcWPF
 
 		// Opperation in use
 		private CalcInput	_currentOpp;
+
+		private bool		_error;
 		#endregion
 
 
@@ -68,6 +70,7 @@ namespace Unv.CalcWPF
 		{
 			_reg00	= "0";
 			_regM	= "0";
+			_error	= false;
 
 			StartNewNumber();
 
@@ -85,6 +88,18 @@ namespace Unv.CalcWPF
 			decimal regM	= Convert.ToDecimal(_regM);
 			bool	useReg0 = false;
 
+			if(_error)
+			switch (input)
+			{
+			case CalcInput.KeyClear:
+				_error = false;
+				break;
+			case CalcInput.KeyMemoryClear:
+				break;
+			default:
+				return;
+			}
+
 			switch (input)
 			{
 			case CalcInput.NumKey0:
@@ -99,7 +114,6 @@ namespace Unv.CalcWPF
 
 			case CalcInput.NumKey8:
 			case CalcInput.NumKey9:
-
 				// If starting new number
 				if (_clearReg01OnNumInput)
 					StartNewNumber();
@@ -107,7 +121,7 @@ namespace Unv.CalcWPF
 				if (_reg01 == "0")
 				{
 					if (input == CalcInput.NumKey0)
-						return;
+						break;
 					_reg01 = "";
 				}
 
@@ -176,6 +190,7 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyMemoryRetrieve:
+
 				_reg01 = _regM;
 				MemoryInUse = true;
 				break;
@@ -198,6 +213,12 @@ namespace Unv.CalcWPF
 
 		private void UpdateDisplay(bool useReg0 = false)
 		{
+			if (_error)
+			{
+				EntryDisplay = "Error!";
+				return;
+			}
+
 			string[] subStrings = _reg01.Split(new char[] { '.' });
 			string formatString = "{0:N0}";
 			if (subStrings.Length > 1)
@@ -214,24 +235,33 @@ namespace Unv.CalcWPF
 
 		private void CommitCurrentOperation(decimal value1, decimal value2)
 		{
-			switch (_currentOpp)
+			try
 			{
-			case CalcInput.KeyAdd:
-				_reg00 = (value1 + value2).ToString();
-				break;
-			case CalcInput.KeySubtract:
-				_reg00 = (value1 - value2).ToString();
-				break;
-			case CalcInput.KeyMultiply:
-				_reg00 = (value1 * value2).ToString();
-				break;
-			case CalcInput.KeyDivide:
-				_reg00 = (value1 / value2).ToString();
-				break;
-			default:
-				break;
+				switch (_currentOpp)
+				{
+				case CalcInput.KeyAdd:
+					_reg00 = (value1 + value2).ToString();
+					break;
+				case CalcInput.KeySubtract:
+					_reg00 = (value1 - value2).ToString();
+					break;
+				case CalcInput.KeyMultiply:
+					_reg00 = (value1 * value2).ToString();
+					break;
+				case CalcInput.KeyDivide:
+					_reg00 = (value1 / value2).ToString();
+					break;
+				default:
+					break;
+				}
+				_clearReg01OnNumInput = true;
 			}
-			_clearReg01OnNumInput = true;
+			catch (DivideByZeroException)
+			{
+				_error = true;
+				_reg00 = "0";
+				_reg01 = "0";
+			}
 		}
 
 		private void OnPropertyChanged(string propertyName)
