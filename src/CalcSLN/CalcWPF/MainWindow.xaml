@@ -3,15 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:views="clr-namespace:Unv.CalcWPF.Views"
         Title="Calc" 
-		Height="350" Width="350"
+		Height="450" Width="400"
+		MinHeight="450"
+		MinWidth="400"
+		MaxHeight="450"
+		MaxWidth="400"
 		SnapsToDevicePixels="True"
 		UseLayoutRounding="True"
 		WindowStartupLocation="CenterScreen"
 		WindowState="Normal"
-		WindowStyle="ToolWindow">
-	<Grid>
+		WindowStyle="ToolWindow"
+		Background="#223322">
+	<Grid Margin="4">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="34"/>
+			<RowDefinition Height="40"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		
@@ -31,17 +36,13 @@
 								Mode=OneWay, 
 								UpdateSourceTrigger=PropertyChanged, 
 								Converter={StaticResource MemDisplayConverter}}"
-				 BaselineAlignment="Superscript"
-				 FontSize="15"
-				 FontWeight="Bold"/>
+				 BaselineAlignment="Superscript"/>
 		</TextBlock>
 		<TextBlock Grid.Row="0"
 				   Margin="8,0"
 				   HorizontalAlignment="Right"
 				   VerticalAlignment="Center">
-			<Run Text="{Binding Path=Computer.EntryDisplay, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-				 FontSize="15"
-				 FontWeight="Bold"/>
+			<Run Text="{Binding Path=Computer.EntryDisplay, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
 		</TextBlock>
 	</Grid>
 </Window>

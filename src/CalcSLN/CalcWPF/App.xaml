@@ -7,5 +7,10 @@
 		<local:BoolToContentConverter x:Key="MemDisplayConverter" 
 									  TrueContent="M" 
 									  FalseContent=""/>
+		<Style TargetType="TextBlock">
+			<Setter Property="Foreground" Value="#112211"/>
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+		</Style>
     </Application.Resources>
 </Application>

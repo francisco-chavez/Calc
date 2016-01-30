@@ -224,7 +224,17 @@ namespace Unv.CalcWPF
 			if (subStrings.Length > 1)
 				formatString = "{0:N" + subStrings[1].Length.ToString() + "}";
 
-			EntryDisplay = string.Format(formatString, Convert.ToDecimal(useReg0 ? _reg00 : _reg01));
+			try
+			{
+				EntryDisplay = string.Format(formatString, Convert.ToDecimal(useReg0 ? _reg00 : _reg01));
+			}
+			catch (OverflowException)
+			{
+				_error = true;
+				_reg00 = "0";
+				_reg01 = "0";
+				UpdateDisplay();
+			}
 		}
 
 		private void StartNewNumber()
