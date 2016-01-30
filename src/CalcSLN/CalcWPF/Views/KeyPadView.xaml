@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+			 Background="{x:Null}"
              d:DesignHeight="304" d:DesignWidth="308">
 	<UserControl.Resources>
 		<Style TargetType="Button">
 			<EventSetter Event="Click" Handler="Button_Click"/>
+			<Setter Property="Margin" Value="2"/>
+			<Setter Property="Background" Value="#889988"/>
+			<Setter Property="Foreground" Value="#223322"/>
+			<Setter Property="FontWeight" Value="Bold"/>
 		</Style>
 	</UserControl.Resources>
 	<Grid>
