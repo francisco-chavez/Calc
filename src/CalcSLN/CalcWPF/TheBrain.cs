@@ -23,11 +23,14 @@ namespace Unv.CalcWPF
 		private string		_regM;
 
 		// Flags
-		private bool		_error;
-		private bool		_disReg01;
-		private bool		_clearReg01OnNumInput;
+		private bool		_error;					// Set to true when there's an error
+		private bool		_disReg01;				// Display Register 01
+		private bool		_clearReg01OnNumInput;	// Clear Register 01 when we recieve number input
 
 
+		/// <summary>
+		/// Get or set the current opperation we're thinking of doing.
+		/// </summary>
 		private CalcInput CurrentOpp
 		{
 			get { return n_currentOpp; }
@@ -47,7 +50,7 @@ namespace Unv.CalcWPF
 				}
 			}
 		}
-		private CalcInput	n_currentOpp;
+		private CalcInput	n_currentOpp;	// That 'n' at the start stands for "NO TOUCH".
 
 		public string EntryDisplay
 		{
@@ -83,15 +86,10 @@ namespace Unv.CalcWPF
 		#region Construtors
 		public TheBrain()
 		{
-			_reg00		= "0";
-			_regM		= "0";
-			_error		= false;
-			_disReg01	= true;
+			Clear();
 
-			StartNewNumber();
-
+			_regM = "0";
 			MemoryInUse = false;
-			CurrentOpp = CalcInput.KeyAdd;
 			UpdateDisplay();
 		}
 		#endregion
@@ -130,10 +128,9 @@ namespace Unv.CalcWPF
 
 			case CalcInput.NumKey8:
 			case CalcInput.NumKey9:
-				if (_disReg01)
-				{
 
-				}
+				if (!_disReg01)
+					Clear();
 
 				// If starting new number
 				if (_clearReg01OnNumInput)
@@ -165,6 +162,8 @@ namespace Unv.CalcWPF
 
 
 			case CalcInput.KeyPoint:
+				if (!_disReg01)
+					Clear();
 				// If starting new number
 				if (_clearReg01OnNumInput)
 					StartNewNumber();
@@ -175,6 +174,14 @@ namespace Unv.CalcWPF
 				break;
 			
 			case CalcInput.KeyInvertSign:
+
+				if (!_disReg01)
+				{
+					var t = _reg00;
+					Clear();
+					_reg01 = t;
+				}
+
 				// Is the value 0
 				var zeroCheck = new char[] { '-', '.', '0' };
 				if (_reg01.All(c => { return zeroCheck.Contains(c); }))
@@ -195,6 +202,12 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeySquareRoot:
+				if (!_disReg01)
+				{
+					Clear();
+					reg01 = reg00;
+				}
+
 				if (reg01 < 0M)
 					RaiseError();
 				else
@@ -207,10 +220,7 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyClear:
-				_disReg01 = true;
-				_reg00 = "0";
-				StartNewNumber();
-				CurrentOpp = CalcInput.KeyAdd;
+				Clear();
 				break;
 
 			case CalcInput.KeyClearEntry:
@@ -231,12 +241,12 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyMemoryAdd:
-				_regM = (regM + reg01).ToString();
+				_regM = (regM + (_disReg01 ? reg01 : reg00)).ToString();
 				MemoryInUse = true;
 				break;
 
 			case CalcInput.KeyMemorySubtract:
-				_regM = (regM - reg01).ToString();
+				_regM = (regM - (_disReg01 ? reg01 : reg00)).ToString();
 				MemoryInUse = true;
 				break;
 
