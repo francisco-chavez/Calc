@@ -151,9 +151,12 @@ namespace Unv.CalcWPF
 				break;
 			
 			case CalcInput.KeyInvertSign:
+				// Is the value 0
 				var zeroCheck = new char[] { '-', '.', '0' };
 				if (_reg01.All(c => { return zeroCheck.Contains(c); }))
 					return;
+
+				// Not 0, keep going
 				if (_reg01.StartsWith("-"))
 					_reg01 = _reg01.Substring(1);
 				else
@@ -211,6 +214,13 @@ namespace Unv.CalcWPF
 			UpdateDisplay(useReg0);
 		}
 
+		private void RaiseError()
+		{
+			_reg00 = "0";
+			_reg01 = "0";
+			_error = true;
+		}
+
 		private void UpdateDisplay(bool useReg0 = false)
 		{
 			if (_error)
@@ -230,9 +240,7 @@ namespace Unv.CalcWPF
 			}
 			catch (OverflowException)
 			{
-				_error = true;
-				_reg00 = "0";
-				_reg01 = "0";
+				RaiseError();
 				UpdateDisplay();
 			}
 		}
@@ -268,9 +276,7 @@ namespace Unv.CalcWPF
 			}
 			catch (DivideByZeroException)
 			{
-				_error = true;
-				_reg00 = "0";
-				_reg01 = "0";
+				RaiseError();
 			}
 		}
 
