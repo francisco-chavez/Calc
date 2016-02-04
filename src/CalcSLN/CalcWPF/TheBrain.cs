@@ -16,53 +16,67 @@ namespace Unv.CalcWPF
 		#endregion
 
 
-		#region Attributes
+		#region Attributes & Properties
 		// Registers
 		private string		_reg00;
 		private string		_reg01;
 		private string		_regM;
 
-		// Register 01 meta data
-		private bool		_clearReg01OnNumInput;
-		private string		_entryDisplay;
-
-		// Register M meta data
-		private bool		_memoryInUse;
-
-		// Opperation in use
-		private CalcInput	_currentOpp;
-		private bool		_useReg01;
-
+		// Flags
 		private bool		_error;
-		#endregion
+		private bool		_disReg01;
+		private bool		_clearReg01OnNumInput;
 
 
-		#region Properties
-		public string EntryDisplay
+		private CalcInput CurrentOpp
 		{
-			get { return _entryDisplay; }
+			get { return n_currentOpp; }
 			set
 			{
-				if (_entryDisplay != value)
+				switch (value)
 				{
-					_entryDisplay = value;
+				case CalcInput.KeyAdd:
+				case CalcInput.KeySubtract:
+				case CalcInput.KeyMultiply:
+				case CalcInput.KeyDivide:
+					n_currentOpp = value;
+					break;
+
+				default:
+					throw new InvalidEnumArgumentException(string.Format("\"{0}\" is an invalid operation.", value));
+				}
+			}
+		}
+		private CalcInput	n_currentOpp;
+
+		public string EntryDisplay
+		{
+			get { return n_entryDisplay; }
+			set
+			{
+				if (n_entryDisplay != value)
+				{
+					n_entryDisplay = value;
 					OnPropertyChanged("EntryDisplay");
 				}
 			}
 		}
+		private string n_entryDisplay;
 
 		public bool MemoryInUse
 		{
-			get { return _memoryInUse; }
+			get { return n_memoryInUse; }
 			private set
 			{
-				if (_memoryInUse != value)
+				if (n_memoryInUse != value)
 				{
-					_memoryInUse = value;
+					n_memoryInUse = value;
 					OnPropertyChanged("MemoryInUse");
 				}
 			}
 		}
+		private bool n_memoryInUse;
+
 		#endregion
 
 
@@ -72,17 +86,18 @@ namespace Unv.CalcWPF
 			_reg00		= "0";
 			_regM		= "0";
 			_error		= false;
-			_useReg01	= true;
+			_disReg01	= true;
 
 			StartNewNumber();
 
 			MemoryInUse = false;
-			_currentOpp = CalcInput.KeyAdd;
+			CurrentOpp = CalcInput.KeyAdd;
 			UpdateDisplay();
 		}
 		#endregion
 
 
+		#region Methods
 		public void NewInput(CalcInput input)
 		{
 			decimal reg00	= Convert.ToDecimal(_reg00);
@@ -115,6 +130,11 @@ namespace Unv.CalcWPF
 
 			case CalcInput.NumKey8:
 			case CalcInput.NumKey9:
+				if (_disReg01)
+				{
+
+				}
+
 				// If starting new number
 				if (_clearReg01OnNumInput)
 					StartNewNumber();
@@ -135,9 +155,12 @@ namespace Unv.CalcWPF
 			case CalcInput.KeySubtract:
 			case CalcInput.KeyMultiply:
 			case CalcInput.KeyDivide:
-				CommitCurrentOperation(reg00, reg01);
-				_currentOpp = input;
-				useReg0 = true;
+				if (_disReg01)
+					CommitCurrentOperation(reg00, reg01);
+				else
+					StartNewNumber();
+				CurrentOpp = input;
+				_disReg01 = true;
 				break;
 
 
@@ -165,7 +188,10 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyPercent:
-				_reg01 = (reg00 * reg01 / 100M).ToString();
+				if (!_disReg01)
+					RaiseError();
+				else
+					_reg01 = (reg00 * reg01 / 100M).ToString();
 				break;
 
 			case CalcInput.KeySquareRoot:
@@ -177,16 +203,18 @@ namespace Unv.CalcWPF
 
 			case CalcInput.KeyEquals:
 				CommitCurrentOperation(reg00, reg01);
-				useReg0 = true;
+				_disReg01 = false;
 				break;
 
 			case CalcInput.KeyClear:
+				_disReg01 = true;
 				_reg00 = "0";
 				StartNewNumber();
-				_currentOpp = CalcInput.KeyAdd;
+				CurrentOpp = CalcInput.KeyAdd;
 				break;
 
 			case CalcInput.KeyClearEntry:
+				_disReg01 = true;
 				StartNewNumber();
 				break;
 
@@ -197,7 +225,7 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeyMemoryRetrieve:
-
+				_disReg01 = true;
 				_reg01 = _regM;
 				MemoryInUse = true;
 				break;
@@ -216,6 +244,17 @@ namespace Unv.CalcWPF
 				throw new InvalidEnumArgumentException();
 			}
 			UpdateDisplay();
+		}
+
+		private void Clear()
+		{
+			this._clearReg01OnNumInput = false;
+			this._disReg01		= true;
+			this._error			= false;
+			this._reg00			= "0";
+			this._reg01			= "0";
+			this.CurrentOpp		= CalcInput.KeyAdd;
+			this.EntryDisplay	= "0";
 		}
 
 		private void RaiseError()
@@ -240,7 +279,7 @@ namespace Unv.CalcWPF
 
 			try
 			{
-				EntryDisplay = string.Format(formatString, Convert.ToDecimal(_useReg01 ? _reg01 : _reg00));
+				EntryDisplay = string.Format(formatString, Convert.ToDecimal(_disReg01 ? _reg01 : _reg00));
 			}
 			catch (OverflowException)
 			{
@@ -259,7 +298,7 @@ namespace Unv.CalcWPF
 		{
 			try
 			{
-				switch (_currentOpp)
+				switch (CurrentOpp)
 				{
 				case CalcInput.KeyAdd:
 					_reg00 = (value1 + value2).ToString();
@@ -289,5 +328,6 @@ namespace Unv.CalcWPF
 			if (PropertyChanged != null)
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
+		#endregion
 	}
 }
