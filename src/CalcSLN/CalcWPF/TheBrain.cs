@@ -31,6 +31,7 @@ namespace Unv.CalcWPF
 
 		// Opperation in use
 		private CalcInput	_currentOpp;
+		private bool		_useReg01;
 
 		private bool		_error;
 		#endregion
@@ -68,9 +69,10 @@ namespace Unv.CalcWPF
 		#region Construtors
 		public TheBrain()
 		{
-			_reg00	= "0";
-			_regM	= "0";
-			_error	= false;
+			_reg00		= "0";
+			_regM		= "0";
+			_error		= false;
+			_useReg01	= true;
 
 			StartNewNumber();
 
@@ -86,7 +88,6 @@ namespace Unv.CalcWPF
 			decimal reg00	= Convert.ToDecimal(_reg00);
 			decimal reg01	= Convert.ToDecimal(_reg01);
 			decimal regM	= Convert.ToDecimal(_regM);
-			bool	useReg0 = false;
 
 			if(_error)
 			switch (input)
@@ -176,7 +177,7 @@ namespace Unv.CalcWPF
 
 			case CalcInput.KeyEquals:
 				CommitCurrentOperation(reg00, reg01);
-				_reg01 = _reg00;
+				useReg0 = true;
 				break;
 
 			case CalcInput.KeyClear:
@@ -214,7 +215,7 @@ namespace Unv.CalcWPF
 			default:
 				throw new InvalidEnumArgumentException();
 			}
-			UpdateDisplay(useReg0);
+			UpdateDisplay();
 		}
 
 		private void RaiseError()
@@ -224,7 +225,7 @@ namespace Unv.CalcWPF
 			_error = true;
 		}
 
-		private void UpdateDisplay(bool useReg0 = false)
+		private void UpdateDisplay()
 		{
 			if (_error)
 			{
@@ -239,7 +240,7 @@ namespace Unv.CalcWPF
 
 			try
 			{
-				EntryDisplay = string.Format(formatString, Convert.ToDecimal(useReg0 ? _reg00 : _reg01));
+				EntryDisplay = string.Format(formatString, Convert.ToDecimal(_useReg01 ? _reg01 : _reg00));
 			}
 			catch (OverflowException)
 			{
