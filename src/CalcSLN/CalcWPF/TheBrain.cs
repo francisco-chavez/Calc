@@ -168,7 +168,10 @@ namespace Unv.CalcWPF
 				break;
 
 			case CalcInput.KeySquareRoot:
-				_reg01 = Math.Sqrt((double) reg01).ToString();
+				if (reg01 < 0M)
+					RaiseError();
+				else
+					_reg01 = Math.Sqrt((double) reg01).ToString();
 				break;
 
 			case CalcInput.KeyEquals:
