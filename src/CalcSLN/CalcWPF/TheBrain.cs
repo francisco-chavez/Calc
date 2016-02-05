@@ -282,7 +282,7 @@ namespace Unv.CalcWPF
 				return;
 			}
 
-			string[] subStrings = _reg01.Split(new char[] { '.' });
+			string[] subStrings = (_disReg01 ? _reg01 : _reg00).Split(new char[] { '.' });
 			string formatString = "{0:N0}";
 			if (subStrings.Length > 1)
 				formatString = "{0:N" + subStrings[1].Length.ToString() + "}";
