@@ -13,7 +13,8 @@
 		WindowStartupLocation="CenterScreen"
 		WindowState="Normal"
 		WindowStyle="ToolWindow"
-		Background="#223322">
+		Background="#223322"
+		Icon="Images/Icon1.ico">
 	<Grid Margin="4">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="40"/>
