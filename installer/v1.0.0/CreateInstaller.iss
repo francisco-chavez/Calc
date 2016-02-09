@@ -31,9 +31,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "Unv.CalcWPF.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Unv.CalcWPF.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Unv.CalcWPF.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\GitHub\Calc\installer\v1.0.0\Unv.CalcWPF.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\GitHub\Calc\installer\v1.0.0\Unv.CalcWPF.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\GitHub\Calc\installer\v1.0.0\Unv.CalcWPF.pdb"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
